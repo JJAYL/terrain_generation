@@ -179,7 +179,8 @@ void draw_terrain ()
      for(int j = 0; j < Y_RESOLUTION; j++)
      {
          glColor3ub (0, 255, 0);
-         glBegin (GL_POLYGON);
+         //glBegin (GL_POLYGON);
+         glBegin(GL_LINE_LOOP);
          glVertex3f (triangle_center_x + i, triangle_center_y - 20 + j, 0);
          glVertex3f (triangle_center_x - 20 + i, triangle_center_y + 20 + j, 0);
          glVertex3f (triangle_center_x + 20 + i, triangle_center_y + 20 + j, 0);
