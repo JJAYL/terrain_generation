@@ -1,468 +1,96 @@
-#include <stdlib.h>
-#include <math.h>
-
-
-#ifdef __APPLE__
-  #include <OpenGL/gl.h>
-  #include <OpenGL/glu.h>
-  #include <GLUT/glut.h>
-#elif __linux__
-  #include <GL/glut.h>
-#endif
-
-
-
-
-
-#define X_RESOLUTION 640 
-#define Y_RESOLUTION 480
-#define LEFT_MOUSE_BUTTON 1
-#define MIDDLE_MOUSE_BUTTON 2
-#define RIGHT_MOUSE_BUTTON 3
-
-
-
-
-GLsizei left_mouse_button_x = 120, left_mouse_button_y = 240;
-GLsizei middle_mouse_button_x = 220, middle_mouse_button_y = 240;
-GLsizei right_mouse_button_x = 320, right_mouse_button_y = 240;
-int last_mouse_button_pressed = 0;
-
-/*
-void draw_terrain()
-{
-    
-   ///GLsizei terrain[100][100];
-   GLsizei xposition = 0;
-   GLsizei yposition = 0;
-   GLsizei zposition = 0;
-   glColor3ub(255, 0, 0);
-   //glBegin(GL_POLYGON); 
-
-   //for(int i = 0; i< X_RESOLUTION; i++)
-   {
-   //   for(int j = 0; j < Y_RESOLUTION; j++)
-      {
-         //terrain[i][j]
-	// xposition = i;
-        // yposition = rand() % 100;
-        // zposition = j;
-         glColor3ub(255, 0, 0);
-         glBegin(GL_POLYGON);
-         glVertex3f(xposition, yposition, zposition);
-         glVertex3f(xposition + 20, yposition, zposition + 20);
-         glVertex3f(xposition + 20, yposition, zposition);
-         glEnd();
-glutPostRedisplay();
-         //glFlush();
-      } glutPostRedisplay();
-   }
-   glutPostRedisplay();
-   //glEnd();   
-
-/*GLsizei square_center_x = 20, square_center_y = 20;
-   glBegin (GL_POLYGON);
-   glVertex3f (square_center_x - 20, square_center_y - 20, 0);
-   glVertex3f (square_center_x + 20, square_center_y - 20, 0);
-   glVertex3f (square_center_x + 20, square_center_y + 20, 0);
-   glVertex3f (square_center_x - 20, square_center_y + 20, 0);
-   glEnd ();
-   glFlush ( );
-  */ 
-   //glutPostRedisplay();
-//}
-
-
-void init (void)
-{
-    glShadeModel (GL_SMOOTH);
-    glClearColor (1.0f, 1.0f, 1.0f, 0.0f);				
-    glClearDepth (1.0f);
-    glEnable (GL_DEPTH_TEST);
-    glDepthFunc (GL_LEQUAL);
-    glEnable (GL_COLOR_MATERIAL);
-    glHint (GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-    glEnable (GL_LIGHTING);
-    glEnable (GL_LIGHT0);
-    GLfloat lightPos[4] = {-1.0, 1.0, 0.5, 0.0};
-    glLightfv (GL_LIGHT0, GL_POSITION, (GLfloat *) &lightPos);
-    glEnable (GL_LIGHT1);
-    GLfloat lightAmbient1[4] = {0.0, 0.0,  0.0, 0.0};
-    GLfloat lightPos1[4]     = {1.0, 0.0, -0.2, 0.0};
-    GLfloat lightDiffuse1[4] = {0.5, 0.5,  0.3, 0.0};
-    glLightfv (GL_LIGHT1,GL_POSITION, (GLfloat *) &lightPos1);
-    glLightfv (GL_LIGHT1,GL_AMBIENT, (GLfloat *) &lightAmbient1);
-    glLightfv (GL_LIGHT1,GL_DIFFUSE, (GLfloat *) &lightDiffuse1);
-    glLightModeli (GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-}
-
-
-void draw_square_filled ()
-{
-  GLsizei square_center_x = 20, square_center_y = 20;
-
-  if (left_mouse_button_x > 20)
-  {
-    if (left_mouse_button_x <= X_RESOLUTION - 20)
-    {
-      square_center_x = left_mouse_button_x;
-    }
-    else
-    {
-      square_center_x = X_RESOLUTION - 20;
-    }
-  }
-  else
-  {
-    square_center_x = 20;
-  }
-  if (left_mouse_button_y > 20)
-  {
-    if (left_mouse_button_y <= Y_RESOLUTION)
-    {
-      square_center_y = left_mouse_button_y;
-    }
-    else
-    {
-      square_center_y = Y_RESOLUTION - 20;
-    }
-  }
-  else
-  {
-    square_center_y = 20;
-  }
-  glColor3ub (255, 0, 0);
-  glBegin (GL_POLYGON);
-  glVertex3f (square_center_x - 20, square_center_y - 20, 0);
-  glVertex3f (square_center_x + 20, square_center_y - 20, 0);
-  glVertex3f (square_center_x + 20, square_center_y + 20, 0);
-  glVertex3f (square_center_x - 20, square_center_y + 20, 0);
-  glEnd ();
-  glFlush ();
-}   
-
-
-
-
-void draw_circle_filled ()
-{
-  GLsizei circle_center_x = 20, circle_center_y = 20;
-  float theta, radius = 20.0, circle_iterations = 24.0;
-
-  if (right_mouse_button_x > 20)
-  {
-    if (right_mouse_button_x <= (X_RESOLUTION - 20))
-    {
-      circle_center_x = right_mouse_button_x;
-    }
-    else
-    {
-      circle_center_x = X_RESOLUTION - 20;
-    }
-  }
-  else
-  {
-    circle_center_x = 20;
-  }
-  if (right_mouse_button_y > 20)
-  {
-    if (right_mouse_button_y <= (Y_RESOLUTION - 20))
-    {
-      circle_center_y = right_mouse_button_y;
-    }
-    else
-    {
-      circle_center_y = Y_RESOLUTION - 20;
-    }
-  }
-  else
-  {
-    circle_center_y = 20;
-  }
-  glColor3ub (0, 0, 255);
-  glPolygonMode (GL_FRONT, GL_FILL);
-  glBegin (GL_POLYGON);
-  glVertex3f (circle_center_x + radius, circle_center_y, 0.0f);
-  for (theta = 0; theta < 2 * M_PI; theta += M_PI / circle_iterations)
-  {
-    glVertex3f (circle_center_x + cos(theta) * radius, circle_center_y + sin(theta) * radius, 0.0f);
-  }
-  glEnd();
-  glFlush ();
-}   
-
-
-
-
-
-void draw_terrain ()
-{
-  GLsizei triangle_center_x = 20, triangle_center_y = 20;
-
-  for(int i = 0; i < X_RESOLUTION; i++)
-  {
-     for(int j = 0; j < Y_RESOLUTION; j++)
-     {
-         glColor3ub (0, 255, 0);
-         //glBegin (GL_POLYGON);
-         glBegin(GL_LINE_LOOP);
-         glVertex3f (triangle_center_x + i, triangle_center_y - 20 + j, 0);
-         glVertex3f (triangle_center_x - 20 + i, triangle_center_y + 20 + j, 0);
-         glVertex3f (triangle_center_x + 20 + i, triangle_center_y + 20 + j, 0);
-         glEnd ();
-     }      
-  }
-
-//  glColor3ub (0, 255, 0);
-//  glBegin (GL_POLYGON);
-//  glVertex3f (triangle_center_x, triangle_center_y - 20, 0);
-//  glVertex3f (triangle_center_x - 20, triangle_center_y + 20, 0);
-//  glVertex3f (triangle_center_x + 20, triangle_center_y + 20, 0);
-  glEnd ();
-  glFlush ();
-}   
-
-
-
-
-
-void display (void)
-{   
-  glClearColor (0.0, 0.0, 0.0, 1.0);
-  glClear (GL_COLOR_BUFFER_BIT);
-  glLoadIdentity ();
+#include <GL/glut.h>  // GLUT, include glu.h and gl.h
  
-  draw_terrain();
-  //draw_square_filled ();
-  //draw_circle_filled ();
-  //draw_triangle_filled ();
-  glFlush ();
+/* Global variables */
+char title[] = "3D Shapes";
+ 
+/* Initialize OpenGL Graphics */
+void initGL() {
+   glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
+   glClearDepth(1.0f);                   // Set background depth to farthest
+   glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
+   glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
+   glShadeModel(GL_SMOOTH);   // Enable smooth shading
+   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
 }
-
-
-
-
-
-void reshape (int w, int h)
-{   
-  glViewport (0, 0, (GLsizei) w, (GLsizei) h);
-  glMatrixMode (GL_PROJECTION);
-  glLoadIdentity ();
-  glOrtho (0.0, X_RESOLUTION, Y_RESOLUTION, 0, -1.0, 1.0);
-  glMatrixMode (GL_MODELVIEW);
-  glLoadIdentity ();
+ 
+/* Handler for window-repaint event. Called back when the window first appears and
+   whenever the window needs to be re-painted. */
+void display() {
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
+   glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
+ 
+   // Render a color-cube consisting of 6 quads with different colors
+   glLoadIdentity();                 // Reset the model-view matrix
+   glTranslatef(1.5f, 0.0f, -7.0f);  // Move right and into the screen
+ 
+   // Render a pyramid consists of 4 triangles
+   glLoadIdentity();                  // Reset the model-view matrix
+   glTranslatef(-1.5f, 0.0f, -6.0f);  // Move left and into the screen
+ 
+   glBegin(GL_TRIANGLES);           // Begin drawing the pyramid with 4 triangles
+      // Front
+      glColor3f(1.0f, 0.0f, 0.0f);     // Red
+      glVertex3f( 0.0f, 1.0f, 0.0f);
+      glColor3f(0.0f, 1.0f, 0.0f);     // Green
+      glVertex3f(-1.0f, -1.0f, 1.0f);
+      glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+      glVertex3f(1.0f, -1.0f, 1.0f);
+ 
+      // Right
+      glColor3f(1.0f, 0.0f, 0.0f);     // Red
+      glVertex3f(0.0f, 1.0f, 0.0f);
+      glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+      glVertex3f(1.0f, -1.0f, 1.0f);
+      glColor3f(0.0f, 1.0f, 0.0f);     // Green
+      glVertex3f(1.0f, -1.0f, -1.0f);
+ 
+      // Back
+      glColor3f(1.0f, 0.0f, 0.0f);     // Red
+      glVertex3f(0.0f, 1.0f, 0.0f);
+      glColor3f(0.0f, 1.0f, 0.0f);     // Green
+      glVertex3f(1.0f, -1.0f, -1.0f);
+      glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+      glVertex3f(-1.0f, -1.0f, -1.0f);
+ 
+      // Left
+      glColor3f(1.0f,0.0f,0.0f);       // Red
+      glVertex3f( 0.0f, 1.0f, 0.0f);
+      glColor3f(0.0f,0.0f,1.0f);       // Blue
+      glVertex3f(-1.0f,-1.0f,-1.0f);
+      glColor3f(0.0f,1.0f,0.0f);       // Green
+      glVertex3f(-1.0f,-1.0f, 1.0f);
+   glEnd();   // Done drawing the pyramid
+ 
+   glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
 }
-
-
-
-
-
-void spindisplay(void)
-{       
-  glutPostRedisplay();
+ 
+/* Handler for window re-size event. Called back when the window first appears and
+   whenever the window is re-sized with its new width and height */
+void reshape(GLsizei width, GLsizei height) {  // GLsizei for non-negative integer
+   // Compute aspect ratio of the new window
+   if (height == 0) height = 1;                // To prevent divide by 0
+   GLfloat aspect = (GLfloat)width / (GLfloat)height;
+ 
+   // Set the viewport to cover the new window
+   glViewport(0, 0, width, height);
+ 
+   // Set the aspect ratio of the clipping volume to match the viewport
+   glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
+   glLoadIdentity();             // Reset
+   // Enable perspective projection with fovy, aspect, zNear and zFar
+   gluPerspective(45.0f, aspect, 0.1f, 100.0f);
 }
-
-
-
-
-
-void mouse (int mouse_button, int state, int x, int y)
-{
-  if (x < 20)
-  {
-    x = 20;
-  }
-  if (x > (X_RESOLUTION - 20))
-  {
-    x = X_RESOLUTION - 20;
-  }
-  if (y < 20)
-  {
-    y = 20;
-  }
-  if (y > (Y_RESOLUTION - 20))
-  {
-    y = Y_RESOLUTION - 20;
-  }
-  if ((mouse_button == GLUT_LEFT_BUTTON) && (state == GLUT_DOWN))
-  {
-    last_mouse_button_pressed = LEFT_MOUSE_BUTTON;
-    left_mouse_button_x = x;
-    left_mouse_button_y = y;
-    glutPostRedisplay ();
-  }
-  if ((mouse_button == GLUT_MIDDLE_BUTTON) && (state == GLUT_DOWN))
-  {
-    last_mouse_button_pressed = MIDDLE_MOUSE_BUTTON;
-    middle_mouse_button_x = x;
-    middle_mouse_button_y = y;
-    glutPostRedisplay ();
-  }
-  if ((mouse_button == GLUT_RIGHT_BUTTON) && (state == GLUT_DOWN))
-  {
-    last_mouse_button_pressed = RIGHT_MOUSE_BUTTON;
-    right_mouse_button_x = x;
-    right_mouse_button_y = y;
-    glutPostRedisplay ();
-  }
-}
-
-
-
-
-
-void keyboard (unsigned char key, int x, int y)
-{
-  switch (key)
-  {
-    case 27:
-      exit (0);
-    break;
-    default:
-    break;
-  }
-}
-
-
-
-
-
-void arrow_keys (int key, int x, int y)
-{
-  switch (key)
-  {
-    case GLUT_KEY_UP:
-      switch (last_mouse_button_pressed)
-      {
-        case LEFT_MOUSE_BUTTON:
-          if (left_mouse_button_y >= 20)
-          {
-            left_mouse_button_y--;
-            glutPostRedisplay ();
-          }
-        break;
-        case MIDDLE_MOUSE_BUTTON:
-          if (middle_mouse_button_y >= 20)
-          {
-            middle_mouse_button_y--;
-            glutPostRedisplay ();
-          }
-        break;
-        case RIGHT_MOUSE_BUTTON:
-          if (right_mouse_button_y >= 20)
-          {
-            right_mouse_button_y--;
-            glutPostRedisplay ();
-          }
-        break;
-        default:
-        break;
-      }
-    break;
-    case GLUT_KEY_DOWN:
-      switch (last_mouse_button_pressed)
-      {
-        case LEFT_MOUSE_BUTTON:
-          if (left_mouse_button_y < Y_RESOLUTION - 20)
-          {
-            left_mouse_button_y++;
-            glutPostRedisplay ();
-          }
-        break;
-        case MIDDLE_MOUSE_BUTTON:
-          if (middle_mouse_button_y < Y_RESOLUTION - 20)
-          {
-            middle_mouse_button_y++;
-            glutPostRedisplay ();
-          }
-        break;
-        case RIGHT_MOUSE_BUTTON:
-          if (right_mouse_button_y < Y_RESOLUTION - 20)
-          {
-            right_mouse_button_y++;
-            glutPostRedisplay ();
-          }
-        break;
-        default:
-        break;
-      }
-    break;
-    case GLUT_KEY_LEFT:
-      switch (last_mouse_button_pressed)
-      {
-        case LEFT_MOUSE_BUTTON:
-          if (left_mouse_button_x > 20)
-          {
-            left_mouse_button_x--;
-            glutPostRedisplay ();
-          }
-        break;
-        case MIDDLE_MOUSE_BUTTON:
-          if (middle_mouse_button_x > 20)
-          {
-            middle_mouse_button_x--;
-            glutPostRedisplay ();
-          }
-        break;
-        case RIGHT_MOUSE_BUTTON:
-          if (right_mouse_button_x > 20)
-          {
-            right_mouse_button_x--;
-            glutPostRedisplay ();
-          }
-        break;
-        default:
-        break;
-      }
-    break;
-    case GLUT_KEY_RIGHT:
-      switch (last_mouse_button_pressed)
-      {
-        case LEFT_MOUSE_BUTTON:
-          if (left_mouse_button_x < X_RESOLUTION - 20)
-          {
-            left_mouse_button_x++;
-            glutPostRedisplay ();
-          }
-        break;
-        case MIDDLE_MOUSE_BUTTON:
-          if (middle_mouse_button_x < X_RESOLUTION - 20)
-          {
-            middle_mouse_button_x++;
-            glutPostRedisplay ();
-          }
-        break;
-        case RIGHT_MOUSE_BUTTON:
-          if (right_mouse_button_x < X_RESOLUTION - 20)
-          {
-            right_mouse_button_x++;
-            glutPostRedisplay ();
-          }
-        break;
-      }
-    break;
-    default:
-    break;
-  }
-}
-
-
-
-
-
-int main (int argc, char *argv[])
-{
-  glutInit (&argc, argv);
-  //glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH);
-  glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB);
-  glutInitWindowSize (X_RESOLUTION, Y_RESOLUTION);
-  glutInitWindowPosition (0,0);
-  glutCreateWindow ("Terrain Generation");
-  init();
-  glutDisplayFunc (display);
-  glutReshapeFunc (reshape);
-  glutMouseFunc (mouse);
-  glutKeyboardFunc (keyboard);
-  glutSpecialFunc (arrow_keys);
-  glutMainLoop ();
+ 
+/* Main function: GLUT runs as a console application starting at main() */
+int main(int argc, char** argv) {
+   glutInit(&argc, argv);            // Initialize GLUT
+   glutInitDisplayMode(GLUT_DOUBLE); // Enable double buffered mode
+   glutInitWindowSize(640, 480);   // Set the window's initial width & height
+   glutInitWindowPosition(50, 50); // Position the window's initial top-left corner
+   glutCreateWindow(title);          // Create window with the given title
+   glutDisplayFunc(display);       // Register callback handler for window re-paint event
+   glutReshapeFunc(reshape);       // Register callback handler for window re-size event
+   initGL();                       // Our own OpenGL initialization
+   glutMainLoop();                 // Enter the infinite event-processing loop
+   return 0;
 }
