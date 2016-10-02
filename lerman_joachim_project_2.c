@@ -72,6 +72,31 @@ glutPostRedisplay();
    //glutPostRedisplay();
 //}
 
+
+void init (void)
+{
+    glShadeModel (GL_SMOOTH);
+    glClearColor (1.0f, 1.0f, 1.0f, 0.0f);				
+    glClearDepth (1.0f);
+    glEnable (GL_DEPTH_TEST);
+    glDepthFunc (GL_LEQUAL);
+    glEnable (GL_COLOR_MATERIAL);
+    glHint (GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glEnable (GL_LIGHTING);
+    glEnable (GL_LIGHT0);
+    GLfloat lightPos[4] = {-1.0, 1.0, 0.5, 0.0};
+    glLightfv (GL_LIGHT0, GL_POSITION, (GLfloat *) &lightPos);
+    glEnable (GL_LIGHT1);
+    GLfloat lightAmbient1[4] = {0.0, 0.0,  0.0, 0.0};
+    GLfloat lightPos1[4]     = {1.0, 0.0, -0.2, 0.0};
+    GLfloat lightDiffuse1[4] = {0.5, 0.5,  0.3, 0.0};
+    glLightfv (GL_LIGHT1,GL_POSITION, (GLfloat *) &lightPos1);
+    glLightfv (GL_LIGHT1,GL_AMBIENT, (GLfloat *) &lightAmbient1);
+    glLightfv (GL_LIGHT1,GL_DIFFUSE, (GLfloat *) &lightDiffuse1);
+    glLightModeli (GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+}
+
+
 void draw_square_filled ()
 {
   GLsizei square_center_x = 20, square_center_y = 20;
@@ -428,10 +453,12 @@ void arrow_keys (int key, int x, int y)
 int main (int argc, char *argv[])
 {
   glutInit (&argc, argv);
+  //glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH);
   glutInitDisplayMode (GLUT_SINGLE | GLUT_RGB);
   glutInitWindowSize (X_RESOLUTION, Y_RESOLUTION);
   glutInitWindowPosition (0,0);
-  glutCreateWindow ("Mouse keyboard click demo");
+  glutCreateWindow ("Terrain Generation");
+  init();
   glutDisplayFunc (display);
   glutReshapeFunc (reshape);
   glutMouseFunc (mouse);
