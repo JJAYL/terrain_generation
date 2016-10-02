@@ -54,9 +54,12 @@ void display() {
         glClearColor (1.0, 1.0, 1.0, 1.0);
         glColor3f(1.0f, 0.0f, 0.0f);
         glBegin (GL_LINE_LOOP);
-        glVertex3f(i , 0, j ); //top (1, 1, 1)
-        glVertex3f( i , 0, j+10); //left (1, -1, 1)
-        glVertex3f( i + 10, 0, j + 10); //bottom
+        //glVertex3f(i , 0, j ); //top (1, 1, 1)
+        //glVertex3f( i , 0, j+10); //left (1, -1, 1)
+        //glVertex3f( i + 10, 0, j + 10); //bottom
+        glVertex3f(i , j, 0 ); //top (1, 1, 1)
+        glVertex3f( i , j + 10, 0); //left (1, -1, 1)
+        glVertex3f( i + 10, j + 10, 0); //bottom
         glPopMatrix(); 
         glEnd();
 
@@ -65,14 +68,14 @@ void display() {
 
       }      
    }
-
+    
 //  glColor3ub (0, 255, 0);
 //  glBegin (GL_POLYGON);
 //  glVertex3f (triangle_center_x, triangle_center_y - 20, 0);
 //  glVertex3f (triangle_center_x - 20, triangle_center_y + 20, 0);
 //  glVertex3f (triangle_center_x + 20, triangle_center_y + 20, 0);
 //  glEnd ();
-  glFlush ();
+//  glFlush ();
  
         
 
@@ -109,7 +112,7 @@ void display() {
       glColor3f(0.0f,1.0f,0.0f);       // Green
       glVertex3f(-1.0f,-1.0f, 1.0f);
    glEnd();   // Done drawing the pyramid
- 
+   gluLookAt (camera_position_x, camera_position_y, camera_position_z, center_x, center_y, center_z, 0.0f, 1.0f, 0.0f);
    glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
 }
  
@@ -158,6 +161,35 @@ void reshape(GLsizei width, GLsizei height) {  // GLsizei for non-negative integ
    // Enable perspective projection with fovy, aspect, zNear and zFar
    gluPerspective(45.0f, aspect, 0.1f, 100.0f);
 }
+
+void arrow_keys (int key, int x, int y)
+{
+  switch (key)
+  {
+    case GLUT_KEY_UP:
+      camera_position_y += 150;
+      glutPostRedisplay();
+        break;
+    break;
+    case GLUT_KEY_DOWN:
+      camera_position_y -= 150;
+      glutPostRedisplay();
+        break;
+    break;
+    case GLUT_KEY_LEFT:
+      camera_position_x -= 150;
+      glutPostRedisplay();
+        break;
+    break;
+    case GLUT_KEY_RIGHT:
+      camera_position_x += 150;
+      glutPostRedisplay();
+    break;
+  }
+}
+
+
+
  
 /* Main function: GLUT runs as a console application starting at main() */
 int main(int argc, char** argv) {
@@ -169,6 +201,7 @@ int main(int argc, char** argv) {
    glutDisplayFunc(display);       // Register callback handler for window re-paint event
    glutReshapeFunc(reshape);       // Register callback handler for window re-size event
    initGL();                       // Our own OpenGL initialization
+   glutSpecialFunc (arrow_keys);
    glutMainLoop();                 // Enter the infinite event-processing loop
    return 0;
 }
