@@ -3,6 +3,13 @@
 #define Y_RESOLUTION 900
 /* Global variables */
 char title[] = "3D Shapes";
+
+float camera_angle_degrees = 0;
+float camera_position_x, camera_position_y, camera_position_z;
+float center_x, center_y, center_z;
+float camera_angle_radians;
+
+
  
 /* Initialize OpenGL Graphics */
 void initGL() {
