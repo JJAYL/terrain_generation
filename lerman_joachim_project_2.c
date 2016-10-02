@@ -1,5 +1,6 @@
 #include <GL/glut.h>  // GLUT, include glu.h and gl.h
- 
+#define X_RESOLUTION 1600
+#define Y_RESOLUTION 900
 /* Global variables */
 char title[] = "3D Shapes";
  
@@ -26,7 +27,48 @@ void display() {
    // Render a pyramid consists of 4 triangles
    glLoadIdentity();                  // Reset the model-view matrix
    glTranslatef(-1.5f, 0.0f, -6.0f);  // Move left and into the screen
+   
+   GLsizei triangle_center_x = 20, triangle_center_y = 20;
+
+   for(int i = 0; i < X_RESOLUTION; i++)
+   {
+      for(int j = 0; j < Y_RESOLUTION; j++)
+      {
+          glColor3ub (0, 255, 0);
+          glBegin (GL_TRIANGLES);
+          glColor3f(1.0f, 0.0f, 0.0f);
+          glVertex3f (triangle_center_x + i, triangle_center_y - 20 + j, 0);
+          glVertex3f (triangle_center_x - 20 + i, triangle_center_y + 20 + j, 0);
+          glVertex3f (triangle_center_x + 20 + i, triangle_center_y + 20 + j, 0);
+          glEnd ();
+
+
+        glPushMatrix();
+        glClearColor (1.0, 1.0, 1.0, 1.0);
+        glColor3f(1.0f, 0.0f, 0.0f);
+        glBegin (GL_LINE_LOOP);
+        glVertex3f(i , 0, j ); //top (1, 1, 1)
+        glVertex3f( i , 0, j+10); //left (1, -1, 1)
+        glVertex3f( i + 10, 0, j + 10); //bottom
+        glPopMatrix(); 
+        glEnd();
+
+
+
+
+      }      
+   }
+
+//  glColor3ub (0, 255, 0);
+//  glBegin (GL_POLYGON);
+//  glVertex3f (triangle_center_x, triangle_center_y - 20, 0);
+//  glVertex3f (triangle_center_x - 20, triangle_center_y + 20, 0);
+//  glVertex3f (triangle_center_x + 20, triangle_center_y + 20, 0);
+//  glEnd ();
+  glFlush ();
  
+        
+
    glBegin(GL_TRIANGLES);           // Begin drawing the pyramid with 4 triangles
       // Front
       glColor3f(1.0f, 0.0f, 0.0f);     // Red
@@ -64,6 +106,35 @@ void display() {
    glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
 }
  
+void draw_terrain ()
+{
+  GLsizei triangle_center_x = 20, triangle_center_y = 20;
+
+  for(int i = 0; i < X_RESOLUTION; i++)
+  {
+     for(int j = 0; j < Y_RESOLUTION; j++)
+     {
+         glColor3ub (0, 255, 0);
+         glBegin (GL_POLYGON);
+         glVertex3f (triangle_center_x + i, triangle_center_y - 20 + j, 0);
+         glVertex3f (triangle_center_x - 20 + i, triangle_center_y + 20 + j, 0);
+         glVertex3f (triangle_center_x + 20 + i, triangle_center_y + 20 + j, 0);
+         glEnd ();
+     }      
+  }
+
+//  glColor3ub (0, 255, 0);
+//  glBegin (GL_POLYGON);
+//  glVertex3f (triangle_center_x, triangle_center_y - 20, 0);
+//  glVertex3f (triangle_center_x - 20, triangle_center_y + 20, 0);
+//  glVertex3f (triangle_center_x + 20, triangle_center_y + 20, 0);
+//  glEnd ();
+  glFlush ();
+}   
+
+
+
+
 /* Handler for window re-size event. Called back when the window first appears and
    whenever the window is re-sized with its new width and height */
 void reshape(GLsizei width, GLsizei height) {  // GLsizei for non-negative integer
