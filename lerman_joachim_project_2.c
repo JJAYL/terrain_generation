@@ -13,7 +13,6 @@ float camera_position_x, camera_position_y, camera_position_z;
 float center_x, center_y, center_z;
 float camera_angle_radians;
 GLsizei height[X_RESOLUTION][Y_RESOLUTION]; //heights must be pregenerated so that random heights don't get generated in real time
-
  
 /* Initialize OpenGL Graphics */
 void initGL() {
@@ -34,44 +33,10 @@ void display() {
    glTranslatef(-1.5f, 0.0f, -7.0f);  // Move right and into the screen
    //glLoadIdentity();                  // Reset the model-view matrix
    //glTranslatef(-1.5f, 0.0f, -6.0f);  // Move left and into the screen
-   glTranslatef(camera_position_x, camera_position_y, camera_position_z);
+   //glTranslatef(camera_position_x, camera_position_y, camera_position_z);
    GLsizei triangle_x = 0, triangle_y = 0, triangle_z;
-   gluLookAt (camera_position_x, camera_position_y, camera_position_z, X_RESOLUTION/2, Y_RESOLUTION/2 , MAX_HEIGHT, 0.0f, 1.0f, 0.0f);
+   gluLookAt (camera_position_x, camera_position_y, camera_position_z, X_RESOLUTION, Y_RESOLUTION, MAX_HEIGHT, 0.0f, 1.0f, 0.0f);
    //gluLookAt (camera_position_x, camera_position_y, camera_position_z, center_x, center_y , center_z, 0.0f, 1.0f, 0.0f);
-
-   glBegin(GL_TRIANGLES);           // Begin drawing the pyramid with 4 triangles
-      // Front
-      glColor3f(1.0f, 0.0f, 0.0f);     // Red
-      glVertex3f( 0.0f, 1.0f, 0.0f);
-      glColor3f(0.0f, 1.0f, 0.0f);     // Green
-      glVertex3f(-1.0f, -1.0f, 1.0f);
-      glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-      glVertex3f(1.0f, -1.0f, 1.0f);
- 
-      // Right
-      glColor3f(1.0f, 0.0f, 0.0f);     // Red
-      glVertex3f(0.0f, 1.0f, 0.0f);
-      glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-      glVertex3f(1.0f, -1.0f, 1.0f);
-      glColor3f(0.0f, 1.0f, 0.0f);     // Green
-      glVertex3f(1.0f, -1.0f, -1.0f);
- 
-      // Back
-      glColor3f(1.0f, 0.0f, 0.0f);     // Red
-      glVertex3f(0.0f, 1.0f, 0.0f);
-      glColor3f(0.0f, 1.0f, 0.0f);     // Green
-      glVertex3f(1.0f, -1.0f, -1.0f);
-      glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-      glVertex3f(-1.0f, -1.0f, -1.0f);
- 
-      // Left
-      glColor3f(1.0f,0.0f,0.0f);       // Red
-      glVertex3f( 0.0f, 1.0f, 0.0f);
-      glColor3f(0.0f,0.0f,1.0f);       // Blue
-      glVertex3f(-1.0f,-1.0f,-1.0f);
-      glColor3f(0.0f,1.0f,0.0f);       // Green
-      glVertex3f(-1.0f,-1.0f, 1.0f);
-   glEnd();   // Done drawing the pyramid
 
    for(int i = 0; i < X_RESOLUTION; i++)
    {
@@ -83,7 +48,7 @@ void display() {
         glColor3f(1.0f, 0.0f, 0.0f);
         //triangle_z = 0;
         glBegin (GL_LINE_LOOP);
-        glVertex3f(i, height[i][j], j );
+        glVertex3f(i, height[i][j], j);
         glVertex3f(i, height[i][j+1], j + 1); 
         glVertex3f(i + 1, height[i+1][j+1], j + 1); 
         glEnd();
@@ -128,7 +93,7 @@ void keyboard (unsigned char key, int x, int y)
       break;
     case 'a':
     case 'A':
-      camera_position_x = camera_position_x - 0.1;
+      camera_position_z = camera_position_z - 0.1;
       break;
     case 's':
     case 'S':
@@ -136,15 +101,15 @@ void keyboard (unsigned char key, int x, int y)
       break;
     case 'd':
     case 'D':
-      camera_position_x = camera_position_x + 0.1;
+      camera_position_z = camera_position_z + 0.1;
       break;
     case 'q':
     case 'Q':
-      camera_position_z = camera_position_z - 0.1;
+      camera_position_x = camera_position_x - 0.1;
       break;
     case 'e':
     case 'E':
-      camera_position_z = camera_position_z + 0.1;
+      camera_position_x = camera_position_x + 0.1;
       break;
     default:
     break;
