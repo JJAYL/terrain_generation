@@ -94,8 +94,13 @@ void display() {
         //triangle_z = 0;
         glBegin (GL_LINE_LOOP);
         glVertex3f(i, height[i][j], j ); //top (1, 1, 1)
-        glVertex3f(i, height[i][j], j + 10); //left (1, -1, 1)
-        glVertex3f(i + 10, height[i][j], j + 10); //bottom
+        glVertex3f(i, height[i][j+1], j + 1); //left (1, -1, 1)
+        glVertex3f(i + 1, height[i+1][j+1], j + 1); //bottom
+        
+        //glVertex3f(i , j, triangle_z); //top (1, 1, 1)
+        //glVertex3f( i , j + 10, triangle_z); //left (1, -1, 1)
+        //glVertex3f( i + 10, j + 10, triangle_z); //bottom
+
         //glVertex3f(i , j, triangle_z); //top (1, 1, 1)
         //glVertex3f( i , j + 10, triangle_z); //left (1, -1, 1)
         //glVertex3f( i + 10, j + 10, triangle_z); //bottom
@@ -145,27 +150,27 @@ void keyboard (unsigned char key, int x, int y)
     break;
     case 'w':
     case 'W':
-      camera_position_y = camera_position_y + 1;
+      camera_position_y = camera_position_y - 1;
       break;
     case 'a':
     case 'A':
-      camera_position_x = camera_position_x - 1;
+      camera_position_x = camera_position_x + 1;
       break;
     case 's':
     case 'S':
-      camera_position_y = camera_position_y - 1;
+      camera_position_y = camera_position_y + 1;
       break;
     case 'd':
     case 'D':
-      camera_position_x = camera_position_x + 1;
+      camera_position_x = camera_position_x - 1;
       break;
     case 'q':
     case 'Q':
-      camera_position_z = camera_position_z + 1;
+      camera_position_z = camera_position_z - 1;
       break;
     case 'e':
     case 'E':
-      camera_position_z = camera_position_z - 1;
+      camera_position_z = camera_position_z + 1;
       break;
     default:
     break;
@@ -178,23 +183,23 @@ void arrow_keys (int key, int x, int y)
   switch (key)
   {
     case GLUT_KEY_UP:
-      camera_position_y = camera_position_y + 10;
+      camera_position_y = camera_position_y - 1;
       center_y = center_y + 10;
         //gluLookAt (camera_position_x, camera_position_y, camera_position_z, center_x, center_y, center_z, 0.0f, 1.0f, 0.0f);
        printf("camera position = %f \n", camera_position_y);
         break;
     case GLUT_KEY_DOWN:
-      camera_position_y = camera_position_y - 10;
+      camera_position_y = camera_position_y + 1;
       center_y = center_y - 10;
         //gluLookAt (camera_position_x, camera_position_y, camera_position_z, center_x, center_y, center_z, 0.0f, 1.0f, 0.0f);
         break;
     case GLUT_KEY_LEFT:
-      camera_position_x = camera_position_x - 10;
+      camera_position_x = camera_position_x + 1;
       center_x = center_x - 10;
         //gluLookAt (camera_position_x, camera_position_y, camera_position_z, center_x, center_y, center_z, 0.0f, 1.0f, 0.0f);
         break;
     case GLUT_KEY_RIGHT:
-      camera_position_x = camera_position_x + 10;
+      camera_position_x = camera_position_x - 1;
       center_x = center_x + 10;
         //gluLookAt (camera_position_x, camera_position_y, camera_position_z, center_x, center_y, center_z, 0.0f, 1.0f, 0.0f);
         break;
@@ -212,7 +217,7 @@ int main(int argc, char** argv) {
   {
      for(int j = 0; j < Y_RESOLUTION; j++)
      {
-         height[i][j] = rand() % 3;
+         height[i][j] = rand() % 10;
      }
   }
    
