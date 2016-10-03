@@ -5,8 +5,8 @@
 
 #define X_RESOLUTION 512
 #define Y_RESOLUTION 288
+#define MAX_HEIGHT 3
 /* Global variables */
-char title[] = "3D Shapes";
 
 float camera_angle_degrees = 0;
 float camera_position_x, camera_position_y, camera_position_z;
@@ -31,13 +31,14 @@ void display() {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
    glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
    glLoadIdentity();                 // Reset the model-view matrix
-   glTranslatef(1.5f, 0.0f, -7.0f);  // Move right and into the screen
+   glTranslatef(-1.5f, 0.0f, -7.0f);  // Move right and into the screen
    //glLoadIdentity();                  // Reset the model-view matrix
    //glTranslatef(-1.5f, 0.0f, -6.0f);  // Move left and into the screen
    glTranslatef(camera_position_x, camera_position_y, camera_position_z);
    GLsizei triangle_x = 0, triangle_y = 0, triangle_z;
+   gluLookAt (camera_position_x, camera_position_y, camera_position_z, X_RESOLUTION/2, Y_RESOLUTION/2 , MAX_HEIGHT, 0.0f, 1.0f, 0.0f);
+   //gluLookAt (camera_position_x, camera_position_y, camera_position_z, center_x, center_y , center_z, 0.0f, 1.0f, 0.0f);
 
-/*
    glBegin(GL_TRIANGLES);           // Begin drawing the pyramid with 4 triangles
       // Front
       glColor3f(1.0f, 0.0f, 0.0f);     // Red
@@ -71,56 +72,29 @@ void display() {
       glColor3f(0.0f,1.0f,0.0f);       // Green
       glVertex3f(-1.0f,-1.0f, 1.0f);
    glEnd();   // Done drawing the pyramid
-*/
 
    for(int i = 0; i < X_RESOLUTION; i++)
    {
       for(int j = 0; j < Y_RESOLUTION; j++)
       {
-/*
-          glColor3ub (0, 255, 0);
-          glBegin (GL_TRIANGLES);
-          glColor3f(1.0f, 0.0f, 0.0f);
-          glVertex3f (triangle_x + i, triangle_y - 1 + j, 0);
-          glVertex3f (triangle_x - 1 + i, triangle_y + 1 + j, 0);
-          glVertex3f (triangle_x + 1 + i, triangle_y + 1 + j, 0);
-          glEnd ();
-*/
-        triangle_z = rand()%2;
 
         glPushMatrix();
         glClearColor (1.0, 1.0, 1.0, 1.0);
         glColor3f(1.0f, 0.0f, 0.0f);
         //triangle_z = 0;
         glBegin (GL_LINE_LOOP);
-        glVertex3f(i, height[i][j], j ); //top (1, 1, 1)
-        glVertex3f(i, height[i][j+1], j + 1); //left (1, -1, 1)
-        glVertex3f(i + 1, height[i+1][j+1], j + 1); //bottom
-        
-        //glVertex3f(i , j, triangle_z); //top (1, 1, 1)
-        //glVertex3f( i , j + 10, triangle_z); //left (1, -1, 1)
-        //glVertex3f( i + 10, j + 10, triangle_z); //bottom
-
-        //glVertex3f(i , j, triangle_z); //top (1, 1, 1)
-        //glVertex3f( i , j + 10, triangle_z); //left (1, -1, 1)
-        //glVertex3f( i + 10, j + 10, triangle_z); //bottom
-        glPopMatrix(); 
+        glVertex3f(i, height[i][j], j );
+        glVertex3f(i, height[i][j+1], j + 1); 
+        glVertex3f(i + 1, height[i+1][j+1], j + 1); 
         glEnd();
 
       }      
    }
-    
-//  glColor3ub (0, 255, 0);
-//  glBegin (GL_POLYGON);
-//  glVertex3f (triangle_x, triangle_y - 20, 0);
-//  glVertex3f (triangle_x - 20,e_y + 20, 0);
-//  glVertex3f (triangle_x + 20, trianglee_y + 20, 0);
-//  glEnd ();
+
    //glFlush ();
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity(); 
-   gluLookAt (camera_position_x, camera_position_y, camera_position_z, center_x, center_y , center_z, 0.0f, 1.0f, 0.0f);
-   glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
+   glutSwapBuffers(); 
    glutPostRedisplay();
 }
 
@@ -150,27 +124,27 @@ void keyboard (unsigned char key, int x, int y)
     break;
     case 'w':
     case 'W':
-      camera_position_y = camera_position_y - 1;
+      camera_position_y = camera_position_y + 0.1;
       break;
     case 'a':
     case 'A':
-      camera_position_x = camera_position_x + 1;
+      camera_position_x = camera_position_x - 0.1;
       break;
     case 's':
     case 'S':
-      camera_position_y = camera_position_y + 1;
+      camera_position_y = camera_position_y - 0.1;
       break;
     case 'd':
     case 'D':
-      camera_position_x = camera_position_x - 1;
+      camera_position_x = camera_position_x + 0.1;
       break;
     case 'q':
     case 'Q':
-      camera_position_z = camera_position_z - 1;
+      camera_position_z = camera_position_z - 0.1;
       break;
     case 'e':
     case 'E':
-      camera_position_z = camera_position_z + 1;
+      camera_position_z = camera_position_z + 0.1;
       break;
     default:
     break;
@@ -183,25 +157,17 @@ void arrow_keys (int key, int x, int y)
   switch (key)
   {
     case GLUT_KEY_UP:
-      camera_position_y = camera_position_y - 1;
-      center_y = center_y + 10;
-        //gluLookAt (camera_position_x, camera_position_y, camera_position_z, center_x, center_y, center_z, 0.0f, 1.0f, 0.0f);
-       printf("camera position = %f \n", camera_position_y);
+      camera_position_y = camera_position_y + 1;
+
         break;
     case GLUT_KEY_DOWN:
-      camera_position_y = camera_position_y + 1;
-      center_y = center_y - 10;
-        //gluLookAt (camera_position_x, camera_position_y, camera_position_z, center_x, center_y, center_z, 0.0f, 1.0f, 0.0f);
+      camera_position_y = camera_position_y - 1;
         break;
     case GLUT_KEY_LEFT:
-      camera_position_x = camera_position_x + 1;
-      center_x = center_x - 10;
-        //gluLookAt (camera_position_x, camera_position_y, camera_position_z, center_x, center_y, center_z, 0.0f, 1.0f, 0.0f);
+      camera_position_x = camera_position_x - 1;
         break;
     case GLUT_KEY_RIGHT:
-      camera_position_x = camera_position_x - 1;
-      center_x = center_x + 10;
-        //gluLookAt (camera_position_x, camera_position_y, camera_position_z, center_x, center_y, center_z, 0.0f, 1.0f, 0.0f);
+      camera_position_x = camera_position_x + 1;
         break;
     default:
         break;
@@ -217,7 +183,7 @@ int main(int argc, char** argv) {
   {
      for(int j = 0; j < Y_RESOLUTION; j++)
      {
-         height[i][j] = rand() % 10;
+         height[i][j] = rand() % MAX_HEIGHT;
      }
   }
    
