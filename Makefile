@@ -17,7 +17,7 @@ LFLAGS =
 LIBS = -lglut -lGL -lGLU -lX11 #-lXmu -lXi -lm
 
 # define the C source files
-SRCS = lerman_joachim_project_2.c #pp
+SRCS = terrain_generation.c #pp
 
 # define the C object files 
 #
@@ -30,7 +30,7 @@ SRCS = lerman_joachim_project_2.c #pp
 OBJS = $(SRCS:.c=.o)
 
 # define the executable file 
-MAIN = lerman_joachim_project_2
+MAIN = terrain_generation
 
 #
 # The following part of the makefile is generic; it can be used to 
